@@ -115,7 +115,7 @@ class EBook extends Book{
 
 class showCaseBook extends Book{
 
-    public showCaseBook(String ISBN, String title, String author, int year, double price){
+    public showCaseBook(String ISBN, String title, String author, int year){
         super(ISBN, title, author, year, 0.0);
     }
 
@@ -220,6 +220,65 @@ class QuantumStoreInventory{
 
 class QuantumBookstoreTesting {
     public static void main(String[] args) {
+        QuantumStoreInventory bookstore = new QuantumStoreInventory();
 
+        // Testing
+        try {
+            // Test adding books
+            System.out.println("*/*/*/*/*/*/*/*/*/*/*/*/ Testing Add Books */*/*/*/*/*/*/*/*/*/*/*/");
+            bookstore.addBook(new PaperBook("ISBN1", "Book 1", "Author 1", 2017, 45.99, 10));
+            bookstore.addBook(new EBook("ISBN2", "Book 2", "Author 2", 2016, 35.99, "PDF"));
+            bookstore.addBook(new showCaseBook("ISBN3", "Book 3", "Author 3", 2008));
+            bookstore.addBook(new PaperBook("ISBN4", "Book 4", "Author 4", 1994, 55.99, 5));
+
+            System.out.println("\n*/*/*/*/*/*/*/*/*/*/*/*/ Initial Inventory */*/*/*/*/*/*/*/*/*/*/*/");
+            bookstore.displayInventory();
+
+            // Test buying books
+            System.out.println("\n*/*/*/*/*/*/*/*/*/*/*/*/ Testing Buy Books */*/*/*/*/*/*/*/*/*/*/*/");
+
+            // Buy paper book
+            double amount1 = bookstore.buyBook("ISBN1", 2, "email@gmail.com", "Smart Village, Giza");
+            System.out.println("Quantum Bookstore: Paid amount: $" + amount1);
+
+            // Buy ebook
+            double amount2 = bookstore.buyBook("ISBN2", 1, "email@gmail.com", "Smart Village, Giza");
+            System.out.println("Quantum Bookstore: Paid amount: $" + amount2);
+
+            // Try to buy showcase book (should fail)
+            try {
+                bookstore.buyBook("ISBN5", 1, "email@gmail.com", "Smart Village, Giza");
+            } catch (Exception e) {
+                System.out.println("Quantum Bookstore: Error - " + e.getMessage());
+            }
+
+            // Try to buy more than available stock
+            try {
+                bookstore.buyBook("ISBN1", 10, "email@gmail.com", "Smart Village, Giza");
+            } catch (Exception e) {
+                System.out.println("Quantum Bookstore: Error - " + e.getMessage());
+            }
+
+            System.out.println("\n*/*/*/*/*/*/*/*/*/*/*/*/ Inventory After Purchases */*/*/*/*/*/*/*/*/*/*/*/");
+            bookstore.displayInventory();
+
+            // Test removing outdated books
+            System.out.println("\n*/*/*/*/*/*/*/*/*/*/*/*/ Testing Remove Outdated Books */*/*/*/*/*/*/*/*/*/*/*/");
+            bookstore.removeOutdatedBooks(15); // Remove books older than 15 years
+
+            System.out.println("\n*/*/*/*/*/*/*/*/*/*/*/*/ Final Inventory */*/*/*/*/*/*/*/*/*/*/*/");
+            bookstore.displayInventory();
+
+            // Test getting books by type
+            System.out.println("\n*/*/*/*/*/*/*/*/*/*/*/*/ Testing Get Books by Type */*/*/*/*/*/*/*/*/*/*/*/");
+            List<Book> paperBooks = bookstore.getBooksByType(BookType.PAPER);
+            System.out.println("Quantum Bookstore: Paper books count: " + paperBooks.size());
+
+            List<Book> ebooks = bookstore.getBooksByType(BookType.EBOOK);
+            System.out.println("Quantum Bookstore: EBooks count: " + ebooks.size());
+
+        } catch (Exception e) {
+            System.out.println("Quantum Bookstore: Error - " + e.getMessage());
+        }
     }
 }
